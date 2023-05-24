@@ -1,0 +1,35 @@
+<div class="d-inline-block pt-2 pd-2 w-100 text-end">
+  <button type="button" id="button-confirm" class="btn btn-primary">{{ button_confirm }}</button>
+</div>
+<form action="" method="post" id="gateway_form">
+  <input type="hidden" name="merchantId" value=""/>
+  <input type="hidden" name="token" value=""/>
+  <input type="hidden" name="integrationMode" value=""/>
+</form>
+
+<script type="text/javascript">
+$('#button-confirm').on('click', function () {
+    var element = this;
+    $.ajax({
+        url: 'index.php?route=extension/universalpay/payment/universalpay|send&language={{ language }}',
+        dataType: 'json',
+        beforeSend: function () {
+            $(element).prop('disabled', true).addClass('loading');
+        },
+        success: function (json) {
+            if (json['error']) {
+                $('#alert').prepend('<div class="alert alert-danger alert-dismissible"><i class="fa-solid fa-circle-exclamation"></i> ' + json['error'] + ' <button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>');
+            }else{
+              $("input[name='merchantId']").val(json['merchantId']);
+              $("input[name='token']").val(json['token']);
+              $("input[name='integrationMode']").val(json['integrationMode']);
+              $("#gateway_form").attr('action',json['action']);
+              $("#gateway_form").submit();
+            }
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+        }
+    });
+});
+</script>

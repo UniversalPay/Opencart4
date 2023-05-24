@@ -1,0 +1,45 @@
+{{ header }}
+<div class="container">
+    <div class="row">{{ column_left }}
+        {% if column_left and column_right %}
+            {% set class = 'col-sm-6' %}
+        {% elseif column_left or column_right %}
+            {% set class = 'col-sm-9' %}
+        {% else %}
+            {% set class = 'col-sm-12' %}
+        {% endif %}
+        <div id="content" class="{{ class }}">{{ content_top }}
+            <div class="gateway_body" style="padding-top: 20px;">
+                {% if errors is defined %}
+                    {% for err_message in errors %}
+                    <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i>
+                        {{ err_message }}
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div id="ipgCashierDiv"  style="height: 550px;border: 1px solid gray;margin: 10px;padding:1px;"></div>
+					<script src="{{ java_script_url }}"></script>
+					<script type="text/javascript">
+						var timer = setInterval(function(){ check() }, 1000);
+						function pay() {
+							var token = "{{ token }}";
+							var merchantId = "{{ merchantId }}";
+							var cashier = com.myriadpayments.api.cashier();
+							cashier.init({ baseUrl: '{{ baseUrl }}' });
+							cashier.show({ containerId: "ipgCashierDiv", merchantId: merchantId, token: token });
+						};
+						function check(){
+							if(typeof(com) == 'undefined'){
+								return false;
+							}else{
+								clearInterval(timer);
+								pay();
+							}
+						}
+					</script>
+                {% endif %}
+            </div>
+            {{ content_bottom }}</div>
+        {{ column_right }}</div>
+</div>
+{{ footer }}
