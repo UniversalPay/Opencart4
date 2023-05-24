@@ -5,7 +5,7 @@
 
 This plugin is provided for UniversalPay merchants using OpenCart4.x. 
 
-Got a question? Email ecommerce@boipa.com for support.
+Got a question? Visit https://www.universalpay.es/contacto/ or email integraciones_es@evopayments.com for support.
 
 ## Installation Guide
 
